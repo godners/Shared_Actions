@@ -22,6 +22,7 @@ runs:
       id: Validate
       shell: bash
       run: |
+        echo "[STEP] Validate Token Inputed via Command $(date '+%F %T') (UTC)"
         if [ -z "${{ inputs.GITHUB_TOKEN }}" ]
         then
           TIME="$(date '+%F %T') (UTC)"
@@ -33,6 +34,7 @@ runs:
           echo "summary=${SUMMARY}" >> $GITHUB_OUTPUT
           exit 1
         fi
+        echo "[STEP] Run Checkout Repository via Action $(date '+%F %T') (UTC)"
 
     - name: "[STEP] Run Checkout Repository via Action"
       id: Checkout
@@ -48,6 +50,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         GH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       run: |
+        echo "[STEP] Run Worker (Check) via Command $(date '+%F %T') (UTC)"
         LATEST_TAG=$(gh release list --limit 1 --json tagName -jq '.[0].tagName' 2>/dev/null || echo "")
         if [ -z "$LATEST_TAG" ]
         then
@@ -69,6 +72,7 @@ runs:
       shell: bash
       run: |
         TIME="$(date '+%F %T') (UTC)"
+        echo "[STEP] Print Summary (NO Changes) via Command ${TIME}"
         TITLE="Daily Release"
         MESSAGE="Relasee canceled because No Changes"
         SUMMARY="[${TITLE} ${TIME}: ${MESSAGE}]"
@@ -76,11 +80,12 @@ runs:
         echo "${SUMMARY}"
         echo "summary=${SUMMARY}" >> $GITHUB_OUTPUT
     
-    - name: "[STEP] Run Worker (Info) via COmmand"
+    - name: "[STEP] Run Worker (Info) via Command"
       id: Worker-Info
       if: steps.Worker-Check.outputs.has_changes == 'true'
       shell: bash
       run: |
+        echo "[STEP] Run Worker (Info) via Command $(date '+%F %T') (UTC)"
         TODAY=$(date '+%Y.%m.%d')
         TAG="${TODAY}.auto"
         echo "tag=${TAG}" >> $GITHUB_OUTPUT
@@ -92,8 +97,11 @@ runs:
       if: steps.Worker-Check.outputs.has_changes == 'true'
       shell: bash
       env:
-        GH_TOKEN ${{ inputs.GITHUB_TOKEN }}
-      run: gh release delete ${{ steps.Worker-Info.outputs.tag }} --yes --cleanup-tag 2>/dev/null || echo ""
+        GH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+      run: |
+        echo "[STEP] Remove Existent Release via Command $(date '+%F %T') (UTC)"
+        gh release delete ${{ steps.Worker-Info.outputs.tag }} --yes --cleanup-tag 2>/dev/null || echo ""
+        echo "[STEP] Create New Release via Action $(date '+%F %T') (UTC)"
       
     - name: "[STEP] Create New Release via Action"
       id: Create
@@ -118,6 +126,7 @@ runs:
       shell: bash
       run: |
         TIME="$(date '+%F %T') (UTC)"
+        echo "[STEP] Print Summary (Has Changes) via Command ${TIME}"
         TITLE="Daily Release"
         MESSAGE="Tag is <${{ steps.Worker-Info.outputs.tag }}>, Time is <${{ steps.Worker-Info.outputs.time }}>."
         SUMMARY="[${TITLE} ${TIME}: ${MESSAGE}]"
