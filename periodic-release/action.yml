@@ -9,7 +9,7 @@ inputs:
   Checkout:
     description: Checkout Repository by This Action
     required: false
-    defalut: false
+    defalut: true
     
 outputs:
   has_changes:
