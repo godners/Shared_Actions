@@ -47,7 +47,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         GH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
-      run:
+      run: |
         LATEST_TAG=$(gh release list --limit 1 --json tagName -jq '.[0].tagName' 2>/dev/null || echo "")
         if [ -z "$LATEST_TAG" ]
         then
