@@ -10,10 +10,10 @@ inputs:
 outputs:
   has_changes:
     description: "Whether there are new changes to release"
-    value: ${{ jobs.daily-release.outputs.has_changes }}
+    value: ${{ steps.daily-release.outputs.has_changes }}
   release_tag:
     description: "The tag generated for the release"
-    value: ${{ jobs.daily-release.outputs.release_tag }}
+    value: ${{ steps.daily-release.outputs.release_tag }}
 
 runs:
   using: "composite"
@@ -47,7 +47,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         GH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
-      runs:
+      run:
         LATEST_TAG=$(gh release list --limit 1 --json tagName -jq '.[0].tagName' 2>/dev/null || echo "")
         if [ -z "$LATEST_TAG" ]
         then
@@ -103,7 +103,7 @@ runs:
         GITHUB_OUTPUT: ${{ inputs.GITHUB_OUTPUT }}
       with:
         tag_name: ${{ steps.Worker-Info.outputs.tag }}
-        name: ${{ step.Worker-Info.outputs.tag }}
+        name: ${{ steps.Worker-Info.outputs.tag }}
         body: |
           - TAG: ${{ steps.Worker-Info.outputs.tag }}
           - TIME: ${{ steps.Worker-Info.outputs.time }}
