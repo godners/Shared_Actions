@@ -1,6 +1,6 @@
-name: "[ACTION] Daily Release"
-description: "A composite action to handle daily releases"
-# https://github.com/godners/Shared_Actions/daily-release/action.yml
+name: "[ACTION] Periodic Release"
+description: "A composite action to handle Periodic releases"
+# https://github.com/godners/Shared_Actions/periodic-release/action.yml
 
 inputs:
   GITHUB_TOKEN:
@@ -10,10 +10,10 @@ inputs:
 outputs:
   has_changes:
     description: "Whether there are new changes to release"
-    value: ${{ steps.daily-release.outputs.has_changes }}
+    value: ${{ steps.Worker-Check.outputs.has_changes }}
   release_tag:
     description: "The tag generated for the release"
-    value: ${{ steps.daily-release.outputs.release_tag }}
+    value: ${{ steps.Worker-Info.outputs.release_tag }}
 
 runs:
   using: "composite"
@@ -26,7 +26,7 @@ runs:
         if [ -z "${{ inputs.GITHUB_TOKEN }}" ]
         then
           TIME="$(date '+%F %T') (UTC)"
-          TITLE="Daily Release"
+          TITLE="Periodic Release"
           MESSAGE="GITHUB_TOKEN is missing or empty. Workflow terminated."
           SUMMARY="[${TITLE} ${TIME}: ${MESSAGE}]"
           echo "${SUMMARY}" >> $GITHUB_STEP_SUMMARY
@@ -73,7 +73,7 @@ runs:
       run: |
         TIME="$(date '+%F %T') (UTC)"
         echo "[STEP] Print Summary (NO Changes) via Command ${TIME}"
-        TITLE="Daily Release"
+        TITLE="Periodic Release"
         MESSAGE="Relasee canceled because No Changes"
         SUMMARY="[${TITLE} ${TIME}: ${MESSAGE}]"
         echo "${SUMMARY}" >> $GITHUB_STEP_SUMMARY
@@ -115,8 +115,8 @@ runs:
         body: |
           - TAG: ${{ steps.Worker-Info.outputs.tag }}
           - TIME: ${{ steps.Worker-Info.outputs.time }}
-          - NOTE: This Release Created by Workflow [Daily-Release]
-          - URL: <https://github.com/godners/Shared_Actions/daily-release/action.yml>
+          - NOTE: This Release Created by Workflow [Periodic-Release]
+          - URL: <https://github.com/godners/Shared_Actions/periodic-release/action.yml>
         draft: false
         prerelease: false
 
@@ -127,7 +127,7 @@ runs:
       run: |
         TIME="$(date '+%F %T') (UTC)"
         echo "[STEP] Print Summary (Has Changes) via Command ${TIME}"
-        TITLE="Daily Release"
+        TITLE="Periodic Release"
         MESSAGE="Tag is <${{ steps.Worker-Info.outputs.tag }}>, Time is <${{ steps.Worker-Info.outputs.time }}>."
         SUMMARY="[${TITLE} ${TIME}: ${MESSAGE}]"
         echo "${SUMMARY}" >> $GITHUB_STEP_SUMMARY
