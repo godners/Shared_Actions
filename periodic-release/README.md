@@ -1,7 +1,9 @@
 # periodic-release
 
 - Auto Release Periodic
-- 
+
+- Example as [example.yml](example.yml)
+
 - Adjust Dispatch On Schedult:
 
 ```yaml
