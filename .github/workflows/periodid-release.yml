@@ -13,6 +13,6 @@ jobs:
   daily-release:
     runs-on: ubuntu-latest   # self-hosted
     steps:
-      - uses: godners/Shared_Actions/periodic-release@main
+      - uses: ./periodic-release
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

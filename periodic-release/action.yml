@@ -129,7 +129,7 @@ runs:
         echo "[STEP] Print Summary (Has Changes) via Command ${TIME}"
         TITLE="Periodic Release"
         MESSAGE="Tag is <${{ steps.Worker-Info.outputs.tag }}>, Time is <${{ steps.Worker-Info.outputs.time }}>."
-        SUMMARY="[${TITLE} ${TIME}: ${MESSAGE}]"
+        SUMMARY="[${TITLE}] ${TIME}: ${MESSAGE}"
         echo "${SUMMARY}" >> $GITHUB_STEP_SUMMARY
         echo "${SUMMARY}"
         echo "summary=${SUMMARY}" >> $GITHUB_OUTPUT
